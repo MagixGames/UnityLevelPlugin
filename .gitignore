@@ -1,0 +1,13 @@
+*.cache
+**/obj/
+**/bin/
+.vs/
+packages/
+**/PublishProfiles/
+_unused/
+**/Publish/
+**/_cache/
+**/out/
+**/logs/
+**/Publish/
+**/__unused/
