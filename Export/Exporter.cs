@@ -10,6 +10,16 @@ namespace UnityLevelPlugin.Export
     // Generally will also have a struct data type in ExportData.cs which is whats built on Export()
     public abstract class Exporter
     {
+        public ExporterContext context;
+        public Exporter()
+        {
+            context = new ExporterContext();
+        }
+        public Exporter(ExporterContext context)
+        {
+            this.context = context;
+        }
+
         public abstract void Export(EbxAssetEntry entry);
     }
 }

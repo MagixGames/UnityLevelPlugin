@@ -15,7 +15,8 @@ namespace UnityLevelPlugin.Export
         // Contains code for base "spatial" based things first, as everything is parent->children
         public override void Export(EbxAssetEntry entry)
         {
-
+            spatial = new ULEBSpatial();
+            spatial.
         }
     }
 }

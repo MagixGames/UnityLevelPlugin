@@ -3,6 +3,7 @@
     <Configurations>Developer - Debug;Release - Alpha;Release - Beta;Release - Final</Configurations>
     <Platforms>x64</Platforms>
     <TargetFrameworks>net48</TargetFrameworks>
+	<LangVersion>12.0</LangVersion>
     <AssemblyTitle>BlenderLightsPlugin</AssemblyTitle>
     <Product>BlenderLightsPlugin</Product>
     <Copyright>Copyright ©  2024</Copyright>

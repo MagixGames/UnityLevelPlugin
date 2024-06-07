@@ -17,7 +17,12 @@ namespace UnityLevelPlugin.Export
         public Vector3 Translation;
         public Vector3 Rotation;
         public Vector3 Scale;
-
+        public ULTransform()
+        {
+            Translation = new Vector3();
+            Rotation = new Vector3();
+            Scale = new Vector3(1);
+        }
         public ULTransform(Vector3 translation, Vector3 rotation, Vector3 scale)
         {
             Translation = translation;
@@ -129,7 +134,12 @@ namespace UnityLevelPlugin.Export
         public List<string> objectVariations;
         public ULObjectBlueprint objectBlueprint;
 
-
+        public ULObjectInstance()
+        {
+            transforms = new List<ULTransform>();
+            objectVariations = new List<string>();
+            objectBlueprint = new ULObjectBlueprint();
+        }
         public void Write(UnityXmlWriter writer, string name)
         {
             writer.WriteStartElement(name);
@@ -262,6 +272,10 @@ namespace UnityLevelPlugin.Export
         public List<ULTextureParameter> textureParameters;
         public string meshFileName;
 
+        public ULMeshData()
+        {
+            textureParameters = new List<ULTextureParameter>();
+        }
         public void Write(UnityXmlWriter writer, string name)
         {
             writer.WriteStartElement(name);
@@ -288,6 +302,10 @@ namespace UnityLevelPlugin.Export
     {
         public List<ULObjectInstance> members;
 
+        public ULEStaticModelGroup()
+        {
+            members = new List<ULObjectInstance>();
+        }
         public void Write(UnityXmlWriter writer, string name)
         {
             writer.WriteStartElement(name);
@@ -306,6 +324,11 @@ namespace UnityLevelPlugin.Export
     public struct ULEObjectBlueprintReferences
     {
         public List<ULObjectInstance> instances;
+
+        public ULEObjectBlueprintReferences()
+        {
+            instances = new List<ULObjectInstance>();
+        }
 
         public void Write(UnityXmlWriter writer, string name)
         {
