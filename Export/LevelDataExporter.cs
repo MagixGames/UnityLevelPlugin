@@ -8,5 +8,7 @@ namespace UnityLevelPlugin.Export
 {
     public class LevelDataExporter : SpatialExporter
     {
+        public LevelDataExporter(UnityLevelPlugin plugin) : base(plugin) { }
+        public LevelDataExporter(ExporterContext context) : base(context) { }
     }
 }

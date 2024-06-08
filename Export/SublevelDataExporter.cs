@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 namespace UnityLevelPlugin.Export
 {
     // Leave the same; spatial
-    public class SublevelDataExporter : Exporter
+    public class SublevelDataExporter : SpatialExporter
     {
+        public SublevelDataExporter(UnityLevelPlugin plugin) : base(plugin) { }
+        public SublevelDataExporter(ExporterContext context) : base(context) { }
     }
 }

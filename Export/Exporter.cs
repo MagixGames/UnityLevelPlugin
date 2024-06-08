@@ -11,9 +11,9 @@ namespace UnityLevelPlugin.Export
     public abstract class Exporter
     {
         public ExporterContext context;
-        public Exporter()
+        public Exporter(UnityLevelPlugin plugin)
         {
-            context = new ExporterContext();
+            context = new ExporterContext(plugin);
         }
         public Exporter(ExporterContext context)
         {

@@ -73,6 +73,12 @@ namespace UnityLevelPlugin
         }
         public void WriteList<T>(string name, List<T> list, Action<T, string> writer)
         {
+            if (list == null)
+            {
+                WriteStartElement(name, ("count", "0"));
+                _writer.WriteEndElement();
+                return;
+            }
             WriteStartElement(name, ("count", list.Count.ToString()));
             foreach (var obj in list)
             {

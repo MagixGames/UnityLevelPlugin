@@ -73,6 +73,16 @@ namespace UnityLevelPlugin.Export
             return trns;
         }
 
+        public static ULTransform FromMatrixLinearTransform(Matrix4x4 m)
+        {
+            LinearTransform trns = new LinearTransform();
+            trns.right = new FrostySdk.Ebx.Vec3() { x = m.M11, y = m.M12, z = m.M13 };
+            trns.up = new FrostySdk.Ebx.Vec3() { x = m.M21, y = m.M22, z = m.M23 };
+            trns.forward = new FrostySdk.Ebx.Vec3() { x = m.M31, y = m.M32, z = m.M33 };
+            trns.trans = new FrostySdk.Ebx.Vec3() { x = m.M41, y = m.M42, z = m.M43 };
+            return FromLinearTransform(trns);
+        }
+
         public static ULTransform FromLinearTransform(FrostySdk.Ebx.LinearTransform linTrans)
         {
             Matrix4x4 matrix = new Matrix4x4(
@@ -353,14 +363,24 @@ namespace UnityLevelPlugin.Export
     public struct ULEBSpatial
     {
         public string name;
+        public ULTransform transform;
         public ULEStaticModelGroup staticModelGroup;
         public ULEObjectBlueprintReferences objectBlueprintReferences;
         public List<ULEBSpatial> children;
 
+        public ULEBSpatial()
+        {
+            transform = new ULTransform();
+            staticModelGroup = new ULEStaticModelGroup();
+            objectBlueprintReferences = new ULEObjectBlueprintReferences();
+            children = new List<ULEBSpatial>();
+        }
+
         public void Write(UnityXmlWriter writer, string name)
         {
             writer.WriteStartElement(name);
-            writer.WriteElement(nameof(name), name);
+            writer.WriteElement(nameof(name), this.name);
+            writer.WriteTransform(nameof(transform), transform);
             staticModelGroup.Write(writer, nameof(staticModelGroup));
             objectBlueprintReferences.Write(writer, nameof(objectBlueprintReferences));
             writer.WriteList(nameof(children), children, (i, n) => i.Write(writer, n));
@@ -371,8 +391,9 @@ namespace UnityLevelPlugin.Export
             ULEBSpatial inst = new ULEBSpatial();
             reader.ReadStartElement(name);
             inst.name = reader.ReadElementString(nameof(name));
-            inst.staticModelGroup = ULEStaticModelGroup.Read(reader, name);
-            inst.objectBlueprintReferences = ULEObjectBlueprintReferences.Read(reader, name);
+            inst.transform = reader.ReadElementTransform(nameof(transform));
+            inst.staticModelGroup = ULEStaticModelGroup.Read(reader, nameof(staticModelGroup));
+            inst.objectBlueprintReferences = ULEObjectBlueprintReferences.Read(reader, nameof(objectBlueprintReferences));
             inst.children = reader.ReadList(nameof(children), (i) => Read(reader, i));
             reader.ReadEndElement();
             return inst;
