@@ -1,4 +1,5 @@
 ﻿using Frosty.Core;
+using Frosty.Core.Controls.Editors;
 using FrostySdk;
 using FrostySdk.Ebx;
 using FrostySdk.Managers;
@@ -41,17 +42,17 @@ namespace UnityLevelPlugin.Tools
             List<ULTransform> result = new List<ULTransform>();
             foreach (string line in lines)
             {
-                float[] m = line.Split(';').Select(s => Convert.ToSingle(s)).ToArray();
+                float[] m = line.Split(';').Select(Convert.ToSingle).ToArray();
                 ULTransform trns = ULTransform.FromMatrix4x4(
-                                              new Matrix4x4(m[0], m[1], m[2], m[3],
-                                                            m[4], m[5], m[6], m[7],
-                                                            m[8], m[9], m[10], m[11],
+                                                            new Matrix4x4(m[0], m[1], m[2], m[3],
+                                                                          m[4], m[5], m[6], m[7],
+                                                                          m[8], m[9], m[10], m[11],
                                                             //new Matrix4x4(m[0], m[9], m[8], m[3],
                                                             //              m[6], m[5], m[4], m[7],
                                                             //              m[2], m[1], m[10], m[11],
-                                                            m[12], m[13], m[14], m[15]
-                                              ));
-                trns.Scale = new Vector3(m[16], m[17], m[18]); // scale after the matrix /shrug
+                                                                        m[12], m[13], m[14], m[15]
+                                                            ));
+                //trns.Scale = new Vector3(m[16], m[17], m[18]); // scale after the matrix /shrug
                 result.Add(trns);
                               //new Matrix4x4(m[0], m[1], m[2], m[3],
                               //              m[4], m[5], m[6], m[7],

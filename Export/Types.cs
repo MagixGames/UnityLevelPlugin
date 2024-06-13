@@ -1,4 +1,6 @@
-﻿using FrostySdk.Ebx;
+﻿using Frosty.Core.Controls.Editors;
+using Frosty.Core.Viewport;
+using FrostySdk.Ebx;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,8 +58,8 @@ namespace UnityLevelPlugin.Export
             trns.Scale = new Vector3();
 
             Matrix4x4.Decompose(matrix, out System.Numerics.Vector3 scale, out System.Numerics.Quaternion rotation, out System.Numerics.Vector3 translation);
-            //System.Numerics.Vector3 euler = ToNumericsVec3(SharpDXUtils.ExtractEulerAngles(ToSharpDXMatrix(matrix)));
-            System.Numerics.Vector3 euler = rotation.ToEuler();
+            System.Numerics.Vector3 euler = ToNumericsVec3(SharpDXUtils.ExtractEulerAngles(ToSharpDXMatrix(matrix)));
+            //System.Numerics.Vector3 euler = rotation.ToEuler();
             trns.Translation.X = translation.X;
             trns.Translation.Y = translation.Y;
             trns.Translation.Z = translation.Z;
@@ -83,20 +85,20 @@ namespace UnityLevelPlugin.Export
             return FromLinearTransform(trns);
         }
 
-        public static ULTransform FromLinearTransform(FrostySdk.Ebx.LinearTransform linTrans)
+        public static ULTransform FromLinearTransform(FrostySdk.Ebx.LinearTransform lt)
         {
-            Matrix4x4 matrix = new Matrix4x4(
-                    linTrans.right.x, linTrans.right.y, linTrans.right.z, 0.0f,
-                    linTrans.up.x, linTrans.up.y, linTrans.up.z, 0.0f,
-                    linTrans.forward.x, linTrans.forward.y, linTrans.forward.z, 0.0f,
-                    linTrans.trans.x, linTrans.trans.y, linTrans.trans.z, 1.0f
+            Matrix matrix = new Matrix(
+                    lt.right.x, lt.right.y, lt.right.z, 0.0f,
+                    lt.up.x, lt.up.y, lt.up.z, 0.0f,
+                    lt.forward.x, lt.forward.y, lt.forward.z, 0.0f,
+                    lt.trans.x, lt.trans.y, lt.trans.z, 1.0f
                     );
 
             ULTransform trns = new ULTransform();
 
-            Matrix4x4.Decompose(matrix, out System.Numerics.Vector3 scale, out System.Numerics.Quaternion rotation, out System.Numerics.Vector3 translation);
-            //System.Numerics.Vector3 euler = ToNumericsVec3(SharpDXUtils.ExtractEulerAngles(ToSharpDXMatrix(matrix)));
-            System.Numerics.Vector3 euler = rotation.ToEuler();
+            matrix.Decompose(out SharpDX.Vector3 scale, out SharpDX.Quaternion rotation, out SharpDX.Vector3 translation);
+            System.Numerics.Vector3 euler = ToNumericsVec3(SharpDXUtils.ExtractEulerAngles(matrix));
+            //System.Numerics.Vector3 euler = rotation.ToEuler();
 
             trns.Translation.X = translation.X;
             trns.Translation.Y = translation.Y;

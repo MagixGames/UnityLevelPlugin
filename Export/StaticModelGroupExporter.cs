@@ -36,11 +36,12 @@ namespace UnityLevelPlugin.Export
             }
             List<ULTransform> physics = ((resEntry == null) ? new List<ULTransform>() : ULTools.GetPhysicsDataOfObjectBlueprint(context.plugin.outputFolder, resEntry.Name));
             App.Logger.Log(physics.Count.ToString());
-            context.PushTransform(ULTransform.FromLinearTransform(modelGroup.Transform));
-            if (resEntry == null)
-            {
-                return;
-            }
+            //context.PushTransform(ULTransform.FromLinearTransform(modelGroup.Transform));
+            //if (resEntry == null)
+            //{
+            //    return;
+            //}
+            int index = 0;
             foreach (StaticModelGroupMemberData member in modelGroup.MemberDatas)
             {
                 ULObjectInstance instance = new ULObjectInstance();
@@ -58,7 +59,7 @@ namespace UnityLevelPlugin.Export
                     //for (int i = 0; i < ((member.PhysicsPartRange.Last - member.PhysicsPartRange.First + 1) / member.PhysicsPartCountPerInstance); i++)
                     for (int i = 0; i < member.InstanceCount; i++)
                     {
-                        instance.transforms.Add(/*context.currentOffset.Peek() + */physics[(int)member.PhysicsPartRange.First + i]);
+                        instance.transforms.Add(/*context.currentOffset.Peek() + */physics[index++]);
                     }
                 }
                 else
@@ -72,7 +73,7 @@ namespace UnityLevelPlugin.Export
 
                 group.members.Add(instance);
             }
-            context.currentOffset.Pop();
+            //context.currentOffset.Pop();
         }
 
         public StaticModelGroupExporter(UnityLevelPlugin plugin) : base(plugin) { }
