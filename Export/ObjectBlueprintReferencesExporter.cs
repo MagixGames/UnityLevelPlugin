@@ -32,7 +32,7 @@ namespace UnityLevelPlugin.Export
                 instance.objectBlueprint = new ULObjectBlueprint();
                 instance.transforms = new List<ULTransform>()
                 {
-                    ULTransform.FromLinearTransform(reference.BlueprintTransform) + context.currentOffset.Peek()
+                    ULTransform.FromLinearTransform(reference.BlueprintTransform) //+ context.currentOffset.Peek()
                 };
                 instance.objectVariations = new List<string>
                 {

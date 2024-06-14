@@ -64,6 +64,9 @@ namespace UnityLevelPlugin
         {
             ULTransform t = new ULTransform();
             ReadStartElement(name);
+            t.right = ReadElementVector3(nameof(ULTransform.right));
+            t.up = ReadElementVector3(nameof(ULTransform.up));
+            t.forward = ReadElementVector3(nameof(ULTransform.forward));
             t.Translation = ReadElementVector3(nameof(ULTransform.Translation));
             t.Rotation = ReadElementVector3(nameof(ULTransform.Rotation));
             t.Scale = ReadElementVector3(nameof(ULTransform.Scale));

@@ -26,54 +26,66 @@ namespace UnityLevelPlugin.Export
             spatial = new ULEBSpatial();
             spatial.name = entry.Filename;
 
-            #region -- SubWorldReferences -- 
-            foreach (var subWorldReference in
-                asset.Objects.Where((i) => i is SubWorldReferenceObjectData).ToList().ConvertAll((i) => (SubWorldReferenceObjectData)i))
+            bool hasObjectBlueprintReferences = false;
+            foreach (object obj in asset.Objects)
             {
-                if (App.AssetManager.GetEbxEntry(subWorldReference.BundleName) == null)
+                switch (obj)
                 {
-                    continue;
+                    case SubWorldReferenceObjectData subWorldReference:
+                        {
+                            if (App.AssetManager.GetEbxEntry(subWorldReference.BundleName) == null)
+                            {
+                                continue;
+                            }
+                            SublevelDataExporter subWorldExporter = new SublevelDataExporter(context);
+                            context.PushTransform(ULTransform.FromLinearTransform(subWorldReference.BlueprintTransform));
+                            subWorldExporter.Export(App.AssetManager.GetEbxEntry(subWorldReference.BundleName));
+                            subWorldExporter.spatial.transform = ULTransform.FromLinearTransform(subWorldReference.BlueprintTransform);
+                            spatial.children.Add(subWorldExporter.spatial);
+                            context.currentOffset.Pop();
+                            break;
+                        }
+                    case LayerReferenceObjectData layerDataReference:
+                        {
+                            if (layerDataReference.Blueprint == null || (App.AssetManager.GetEbxEntry(layerDataReference.Blueprint.External.FileGuid) == null))
+                            {
+                                continue;
+                            }
+                            LayerDataExporter layerDataExporter = new LayerDataExporter(context);
+                            context.PushTransform(ULTransform.FromLinearTransform(layerDataReference.BlueprintTransform));
+                            layerDataExporter.Export(App.AssetManager.GetEbxEntry(layerDataReference.Blueprint.External.FileGuid));
+                            layerDataExporter.spatial.transform = ULTransform.FromLinearTransform(layerDataReference.BlueprintTransform);
+                            spatial.children.Add(layerDataExporter.spatial);
+                            context.currentOffset.Pop();
+                            break;
+                        }
+                    case SpatialPrefabReferenceObjectData prefabReference:
+                        {
+                            if (prefabReference.Blueprint == null || (App.AssetManager.GetEbxEntry(prefabReference.Blueprint.External.FileGuid) == null))
+                            {
+                                continue;
+                            }
+                            SpatialPrefabExporter spatialPrefabExporter = new SpatialPrefabExporter(context);
+                            context.PushTransform(ULTransform.FromLinearTransform(prefabReference.BlueprintTransform));
+                            spatialPrefabExporter.Export(App.AssetManager.GetEbxEntry(prefabReference.Blueprint.External.FileGuid));
+                            spatialPrefabExporter.spatial.transform = ULTransform.FromLinearTransform(prefabReference.BlueprintTransform);
+                            if (!(spatialPrefabExporter.spatial.children.Count == 0 &&
+                                spatialPrefabExporter.spatial.staticModelGroup.members.Count == 0 &&
+                                spatialPrefabExporter.spatial.objectBlueprintReferences.instances.Count == 0))
+                            {
+                                spatial.children.Add(spatialPrefabExporter.spatial);
+                            }
+                            context.currentOffset.Pop();
+                            break;
+                        }
+                    case ObjectReferenceObjectData _:
+                        {
+                            hasObjectBlueprintReferences = true;
+                            break;
+                        }
                 }
-                SublevelDataExporter subWorldExporter = new SublevelDataExporter(context);
-                context.PushTransform(ULTransform.FromLinearTransform(subWorldReference.BlueprintTransform));
-                subWorldExporter.Export(App.AssetManager.GetEbxEntry(subWorldReference.BundleName));
-                subWorldExporter.spatial.transform = ULTransform.FromLinearTransform(subWorldReference.BlueprintTransform);
-                spatial.children.Add(subWorldExporter.spatial);
-                context.currentOffset.Pop();
             }
-            #endregion
-            #region -- LayerDataReferences -- 
-            foreach (var layerDataReference in
-                asset.Objects.Where((i) => i is LayerReferenceObjectData).ToList().ConvertAll((i) => (LayerReferenceObjectData)i))
-            {
-                if (layerDataReference.Blueprint == null || (App.AssetManager.GetEbxEntry(layerDataReference.Blueprint.External.FileGuid) == null))
-                {
-                    continue;
-                }
-                LayerDataExporter layerDataExporter = new LayerDataExporter(context);
-                context.PushTransform(ULTransform.FromLinearTransform(layerDataReference.BlueprintTransform));
-                layerDataExporter.Export(App.AssetManager.GetEbxEntry(layerDataReference.Blueprint.External.FileGuid));
-                layerDataExporter.spatial.transform = ULTransform.FromLinearTransform(layerDataReference.BlueprintTransform);
-                spatial.children.Add(layerDataExporter.spatial);
-                context.currentOffset.Pop();
-            }
-            #endregion
-            #region -- SpatialPrefabReferences -- 
-            foreach (var prefabReference in
-                asset.Objects.Where((i) => i is SpatialPrefabReferenceObjectData).ToList().ConvertAll((i) => (SpatialPrefabReferenceObjectData)i))
-            {
-                if (prefabReference.Blueprint == null || (App.AssetManager.GetEbxEntry(prefabReference.Blueprint.External.FileGuid) == null))
-                {
-                    continue;
-                }
-                SpatialPrefabExporter spatialPrefabExporter = new SpatialPrefabExporter(context);
-                context.PushTransform(ULTransform.FromLinearTransform(prefabReference.BlueprintTransform));
-                spatialPrefabExporter.Export(App.AssetManager.GetEbxEntry(prefabReference.Blueprint.External.FileGuid));
-                spatialPrefabExporter.spatial.transform = ULTransform.FromLinearTransform(prefabReference.BlueprintTransform);
-                spatial.children.Add(spatialPrefabExporter.spatial);
-                context.currentOffset.Pop();
-            }
-            #endregion
+
 
             #region -- StaticModelGroup --
             StaticModelGroupExporter staticModelGroupExporter = new StaticModelGroupExporter(context);
@@ -81,10 +93,14 @@ namespace UnityLevelPlugin.Export
             spatial.staticModelGroup = staticModelGroupExporter.group;
             #endregion
             #region -- ObjectReferences --
-            ObjectBlueprintReferencesExporter objectBlueprintReferencesExporter = new ObjectBlueprintReferencesExporter(context);
-            objectBlueprintReferencesExporter.Export(entry);
-            spatial.objectBlueprintReferences = objectBlueprintReferencesExporter.bps;
+            if (hasObjectBlueprintReferences)
+            {
+                ObjectBlueprintReferencesExporter objectBlueprintReferencesExporter = new ObjectBlueprintReferencesExporter(context);
+                objectBlueprintReferencesExporter.Export(entry);
+                spatial.objectBlueprintReferences = objectBlueprintReferencesExporter.bps;
+            }
             #endregion
+
         }
     }
 }

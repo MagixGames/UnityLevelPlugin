@@ -31,7 +31,7 @@ namespace UnityLevelPlugin.Tools
         {
             // Every object will have the same naming convention of just having "_Physics_Win32" at the end
             // so to speed it up we can just do that
-            //return App.AssetManager.GetResAs<HavokPhysicsData>(App.AssetManager.GetResEntry(fullPath + ((fullPath.EndsWith("_physics_win32")) ? "" : "_Physics_Win32")));
+            // return App.AssetManager.GetResAs<HavokPhysicsData>(App.AssetManager.GetResEntry(fullPath + ((fullPath.EndsWith("_physics_win32")) ? "" : "_Physics_Win32")));
             string outFile = ToFile(outputFolder, "havokinfo");
             HavokInterface.ExportTranslationInformation(outFile, App.AssetManager.GetResEntry(fullPath + ((fullPath.EndsWith("_physics_win32")) ? "" : "_Physics_Win32")));
             //Thread.Sleep(100);
@@ -51,7 +51,7 @@ namespace UnityLevelPlugin.Tools
                                                             //              m[6], m[5], m[4], m[7],
                                                             //              m[2], m[1], m[10], m[11],
                                                                         m[12], m[13], m[14], m[15]
-                                                            ));
+                                                            )); 
                 //trns.Scale = new Vector3(m[16], m[17], m[18]); // scale after the matrix /shrug
                 result.Add(trns);
                               //new Matrix4x4(m[0], m[1], m[2], m[3],

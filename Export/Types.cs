@@ -16,6 +16,11 @@ namespace UnityLevelPlugin.Export
     #region -- Types --
     public struct ULTransform
     {
+        // TEMP ?
+        public Vector3 right;
+        public Vector3 up;
+        public Vector3 forward;
+
         public Vector3 Translation;
         public Vector3 Rotation;
         public Vector3 Scale;
@@ -60,6 +65,13 @@ namespace UnityLevelPlugin.Export
             Matrix4x4.Decompose(matrix, out System.Numerics.Vector3 scale, out System.Numerics.Quaternion rotation, out System.Numerics.Vector3 translation);
             System.Numerics.Vector3 euler = ToNumericsVec3(SharpDXUtils.ExtractEulerAngles(ToSharpDXMatrix(matrix)));
             //System.Numerics.Vector3 euler = rotation.ToEuler();
+
+
+            trns.right = new Vector3(matrix.M11, matrix.M12, matrix.M13);
+            trns.up = new Vector3(matrix.M21, matrix.M22, matrix.M23);
+            trns.forward = new Vector3(matrix.M31, matrix.M32, matrix.M33);
+
+
             trns.Translation.X = translation.X;
             trns.Translation.Y = translation.Y;
             trns.Translation.Z = translation.Z;
@@ -68,8 +80,8 @@ namespace UnityLevelPlugin.Export
             trns.Scale.Y = scale.Y;
             trns.Scale.Z = scale.Z;
 
-            trns.Rotation.X = euler.X;
-            trns.Rotation.Y = euler.Y;
+            trns.Rotation.X = 0f - euler.Y;
+            trns.Rotation.Y = euler.X;
             trns.Rotation.Z = euler.Z;
 
             return trns;
@@ -95,10 +107,16 @@ namespace UnityLevelPlugin.Export
                     );
 
             ULTransform trns = new ULTransform();
-
+            
             matrix.Decompose(out SharpDX.Vector3 scale, out SharpDX.Quaternion rotation, out SharpDX.Vector3 translation);
             System.Numerics.Vector3 euler = ToNumericsVec3(SharpDXUtils.ExtractEulerAngles(matrix));
             //System.Numerics.Vector3 euler = rotation.ToEuler();
+
+
+
+            trns.right = new Vector3(matrix.M11, matrix.M12, matrix.M13);
+            trns.up = new Vector3(matrix.M21, matrix.M22, matrix.M23);
+            trns.forward = new Vector3(matrix.M31, matrix.M32, matrix.M33);
 
             trns.Translation.X = translation.X;
             trns.Translation.Y = translation.Y;
@@ -108,8 +126,8 @@ namespace UnityLevelPlugin.Export
             trns.Scale.Y = scale.Y;
             trns.Scale.Z = scale.Z;
 
-            trns.Rotation.X = euler.X;
-            trns.Rotation.Y = euler.Y;
+            trns.Rotation.X = 0 - euler.Y;
+            trns.Rotation.Y = euler.X;
             trns.Rotation.Z = euler.Z;
 
             return trns;

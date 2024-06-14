@@ -99,6 +99,9 @@ namespace UnityLevelPlugin
         public void WriteTransform(string name, ULTransform transform)
         {
             _writer.WriteStartElement(name);
+            WriteVec3(nameof(transform.right), transform.right);
+            WriteVec3(nameof(transform.up), transform.up);
+            WriteVec3(nameof(transform.forward), transform.forward);
             WriteVec3(nameof(transform.Translation), transform.Translation);
             WriteVec3(nameof(transform.Rotation), transform.Rotation);
             WriteVec3(nameof(transform.Scale), transform.Scale);
