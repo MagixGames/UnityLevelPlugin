@@ -3,4 +3,4 @@ I can't figure out how to properly translate rotations from FB to Unity. It soun
 ### PLEASE PR IF YOU FIND A FIX PLEASEEEE
 ## Notes for development
 - The frosty output path is hardcoded rn, just change it to something u want
-- THE UNITY PROJECT MUST BE A **UNIVERSEAL 3D** PROJECT
+- THE UNITY PROJECT MUST BE A **UNIVERSAL 3D** PROJECT
