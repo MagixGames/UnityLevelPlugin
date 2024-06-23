@@ -38,11 +38,9 @@ namespace UnityLevelPlugin.Export
                                 continue;
                             }
                             SublevelDataExporter subWorldExporter = new SublevelDataExporter(context);
-                            context.PushTransform(ULTransform.FromLinearTransform(subWorldReference.BlueprintTransform));
                             subWorldExporter.Export(App.AssetManager.GetEbxEntry(subWorldReference.BundleName));
                             subWorldExporter.spatial.transform = ULTransform.FromLinearTransform(subWorldReference.BlueprintTransform);
                             spatial.children.Add(subWorldExporter.spatial);
-                            context.currentOffset.Pop();
                             break;
                         }
                     case LayerReferenceObjectData layerDataReference:
@@ -52,11 +50,9 @@ namespace UnityLevelPlugin.Export
                                 continue;
                             }
                             LayerDataExporter layerDataExporter = new LayerDataExporter(context);
-                            context.PushTransform(ULTransform.FromLinearTransform(layerDataReference.BlueprintTransform));
                             layerDataExporter.Export(App.AssetManager.GetEbxEntry(layerDataReference.Blueprint.External.FileGuid));
                             layerDataExporter.spatial.transform = ULTransform.FromLinearTransform(layerDataReference.BlueprintTransform);
                             spatial.children.Add(layerDataExporter.spatial);
-                            context.currentOffset.Pop();
                             break;
                         }
                     case SpatialPrefabReferenceObjectData prefabReference:
@@ -66,7 +62,6 @@ namespace UnityLevelPlugin.Export
                                 continue;
                             }
                             SpatialPrefabExporter spatialPrefabExporter = new SpatialPrefabExporter(context);
-                            context.PushTransform(ULTransform.FromLinearTransform(prefabReference.BlueprintTransform));
                             spatialPrefabExporter.Export(App.AssetManager.GetEbxEntry(prefabReference.Blueprint.External.FileGuid));
                             spatialPrefabExporter.spatial.transform = ULTransform.FromLinearTransform(prefabReference.BlueprintTransform);
                             if (!(spatialPrefabExporter.spatial.children.Count == 0 &&
@@ -75,7 +70,6 @@ namespace UnityLevelPlugin.Export
                             {
                                 spatial.children.Add(spatialPrefabExporter.spatial);
                             }
-                            context.currentOffset.Pop();
                             break;
                         }
                     case ObjectReferenceObjectData _:

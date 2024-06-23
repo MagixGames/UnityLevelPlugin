@@ -17,20 +17,17 @@ namespace UnityLevelPlugin.Export
     public struct ULTransform
     {
         // TEMP ?
-        public Vector3 right;
-        public Vector3 up;
-        public Vector3 forward;
 
         public Vector3 Translation;
-        public Vector3 Rotation;
+        public Quaternion Rotation;
         public Vector3 Scale;
         public ULTransform()
         {
             Translation = new Vector3();
-            Rotation = new Vector3();
+            Rotation = new Quaternion();
             Scale = new Vector3(1);
         }
-        public ULTransform(Vector3 translation, Vector3 rotation, Vector3 scale)
+        public ULTransform(Vector3 translation, Quaternion rotation, Vector3 scale)
         {
             Translation = translation;
             Rotation = rotation;
@@ -57,9 +54,23 @@ namespace UnityLevelPlugin.Export
 
         public static ULTransform FromMatrix4x4(Matrix4x4 matrix)
         {
+            matrix = new Matrix4x4(
+                matrix.M11, -matrix.M12, -matrix.M13, matrix.M14,
+                -matrix.M21, matrix.M22, matrix.M23, matrix.M24,
+                -matrix.M31, matrix.M32, matrix.M33, matrix.M34,
+                -matrix.M41, matrix.M42, matrix.M43, matrix.M44
+                );
+            //var matrix2 = new Matrix4x4(
+            //    matrix.M11, matrix.M12, matrix.M13, matrix.M14,
+            //    matrix.M21, matrix.M22, matrix.M23, matrix.M24,
+            //    matrix.M31, matrix.M32, matrix.M33, matrix.M34,
+            //    matrix.M31, matrix.M32, matrix.M33, matrix.M44
+            //    );
+            //matrix = Matrix4x4.Transpose( matrix );
+
             ULTransform trns = new ULTransform();
             trns.Translation = new Vector3();
-            trns.Rotation = new Vector3();
+            trns.Rotation = new Quaternion();
             trns.Scale = new Vector3();
 
             Matrix4x4.Decompose(matrix, out System.Numerics.Vector3 scale, out System.Numerics.Quaternion rotation, out System.Numerics.Vector3 translation);
@@ -67,9 +78,6 @@ namespace UnityLevelPlugin.Export
             //System.Numerics.Vector3 euler = rotation.ToEuler();
 
 
-            trns.right = new Vector3(matrix.M11, matrix.M12, matrix.M13);
-            trns.up = new Vector3(matrix.M21, matrix.M22, matrix.M23);
-            trns.forward = new Vector3(matrix.M31, matrix.M32, matrix.M33);
 
 
             trns.Translation.X = translation.X;
@@ -80,9 +88,7 @@ namespace UnityLevelPlugin.Export
             trns.Scale.Y = scale.Y;
             trns.Scale.Z = scale.Z;
 
-            trns.Rotation.X = 0f - euler.Y;
-            trns.Rotation.Y = euler.X;
-            trns.Rotation.Z = euler.Z;
+            trns.Rotation = new Quaternion(rotation.X, rotation.Y, rotation.Z, rotation.W);
 
             return trns;
         }
@@ -99,13 +105,13 @@ namespace UnityLevelPlugin.Export
 
         public static ULTransform FromLinearTransform(FrostySdk.Ebx.LinearTransform lt)
         {
-            Matrix matrix = new Matrix(
+            Matrix4x4 matrix = new Matrix4x4(
                     lt.right.x, lt.right.y, lt.right.z, 0.0f,
                     lt.up.x, lt.up.y, lt.up.z, 0.0f,
                     lt.forward.x, lt.forward.y, lt.forward.z, 0.0f,
                     lt.trans.x, lt.trans.y, lt.trans.z, 1.0f
                     );
-
+            /*
             ULTransform trns = new ULTransform();
             
             matrix.Decompose(out SharpDX.Vector3 scale, out SharpDX.Quaternion rotation, out SharpDX.Vector3 translation);
@@ -126,11 +132,9 @@ namespace UnityLevelPlugin.Export
             trns.Scale.Y = scale.Y;
             trns.Scale.Z = scale.Z;
 
-            trns.Rotation.X = 0 - euler.Y;
-            trns.Rotation.Y = euler.X;
-            trns.Rotation.Z = euler.Z;
-
-            return trns;
+            trns.Rotation = new Quaternion(rotation.X, rotation.Y, rotation.Z, rotation.W);
+            */
+            return ULTransform.FromMatrix4x4(matrix);
         }
 
         public LinearTransform ToLinearTransform()
@@ -193,18 +197,19 @@ namespace UnityLevelPlugin.Export
     public struct ULObjectBlueprint
     {
         public string meshPath;
-        //public string texturePath;
+        public string originalPath;
 
-        public ULObjectBlueprint(string meshPath/*, string texturePath*/)
+        public ULObjectBlueprint(string meshPath, string originalPath)
         {
             this.meshPath = meshPath;
-            //this.texturePath = texturePath;
+            this.originalPath = originalPath;
         }
 
         public void Write(UnityXmlWriter writer, string name)
         {
             writer.WriteStartElement(name);
             writer.WriteElement(nameof(meshPath), meshPath);
+            writer.WriteElement(nameof(originalPath), originalPath);
             writer.WriteEndElement();
         }
         public static ULObjectBlueprint Read(UnityXmlReader reader, string name)
@@ -212,6 +217,7 @@ namespace UnityLevelPlugin.Export
             ULObjectBlueprint inst = new ULObjectBlueprint();
             reader.ReadStartElement(name);
             inst.meshPath = reader.ReadElementString(nameof(meshPath));
+            inst.originalPath = reader.ReadElementString(nameof(originalPath));
             reader.ReadEndElement();
             return inst;
         }

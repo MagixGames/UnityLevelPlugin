@@ -99,11 +99,8 @@ namespace UnityLevelPlugin
         public void WriteTransform(string name, ULTransform transform)
         {
             _writer.WriteStartElement(name);
-            WriteVec3(nameof(transform.right), transform.right);
-            WriteVec3(nameof(transform.up), transform.up);
-            WriteVec3(nameof(transform.forward), transform.forward);
             WriteVec3(nameof(transform.Translation), transform.Translation);
-            WriteVec3(nameof(transform.Rotation), transform.Rotation);
+            WriteQuaterion(nameof(transform.Rotation), transform.Rotation);
             WriteVec3(nameof(transform.Scale), transform.Scale);
             _writer.WriteEndElement();
         }
@@ -114,6 +111,15 @@ namespace UnityLevelPlugin
             WriteElement(nameof(v.X), v.X);
             WriteElement(nameof(v.Y), v.Y);
             WriteElement(nameof(v.Z), v.Z);
+            _writer.WriteEndElement();
+        }
+        public void WriteQuaterion(string name, Quaternion v)
+        {
+            _writer.WriteStartElement(name);
+            WriteElement(nameof(v.X), v.X);
+            WriteElement(nameof(v.Y), v.Y);
+            WriteElement(nameof(v.Z), v.Z);
+            WriteElement(nameof(v.W), v.W);
             _writer.WriteEndElement();
         }
 

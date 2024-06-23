@@ -41,6 +41,7 @@ namespace UnityLevelPlugin.Export
                 if (ReadObjectBlueprint(App.AssetManager.GetEbxEntry(reference.Blueprint.External.FileGuid), out var mesh))
                 {
                     instance.objectBlueprint.meshPath = mesh.Filename + ".fbx";
+                    instance.objectBlueprint.originalPath = mesh.Name;
                 }
                 else
                 {

@@ -59,16 +59,24 @@ namespace UnityLevelPlugin
             ReadEndElement();
             return vec;
         }
+        public Quaternion ReadElementQuaterion(string name)
+        {
+            Quaternion vec = new Quaternion();
+            ReadStartElement(name);
+            vec.X = ReadElementFloat(nameof(Quaternion.X));
+            vec.Y = ReadElementFloat(nameof(Quaternion.Y));
+            vec.Z = ReadElementFloat(nameof(Quaternion.Z));
+            vec.W = ReadElementFloat(nameof(Quaternion.W));
+            ReadEndElement();
+            return vec;
+        }
 
         public ULTransform ReadElementTransform(string name)
         {
             ULTransform t = new ULTransform();
             ReadStartElement(name);
-            t.right = ReadElementVector3(nameof(ULTransform.right));
-            t.up = ReadElementVector3(nameof(ULTransform.up));
-            t.forward = ReadElementVector3(nameof(ULTransform.forward));
             t.Translation = ReadElementVector3(nameof(ULTransform.Translation));
-            t.Rotation = ReadElementVector3(nameof(ULTransform.Rotation));
+            t.Rotation = ReadElementQuaterion(nameof(ULTransform.Rotation));
             t.Scale = ReadElementVector3(nameof(ULTransform.Scale));
             ReadEndElement();
             return t;

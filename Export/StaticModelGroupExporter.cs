@@ -4,6 +4,7 @@ using FrostySdk.IO;
 using FrostySdk.Managers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,6 +43,7 @@ namespace UnityLevelPlugin.Export
             //    return;
             //}
             int index = 0;
+            int memberindex = 0;
             foreach (StaticModelGroupMemberData member in modelGroup.MemberDatas)
             {
                 ULObjectInstance instance = new ULObjectInstance();
@@ -52,17 +54,26 @@ namespace UnityLevelPlugin.Export
 
                 member.InstanceObjectVariation.ForEach((value) => instance.objectVariations.Add((value == 0) ? "Default" : (context.plugin.ObjectVariablesTable.TryGetValue(value, out var outEntry)) ? outEntry : "Default"));
 
-                instance.objectBlueprint = new ULObjectBlueprint(mesh.Filename + ".fbx");
-                if (member.PhysicsPartCountPerInstance > 0)
+                instance.objectBlueprint = new ULObjectBlueprint(mesh.Filename + ".fbx", mesh.Name);
+                //if (member.PhysicsPartCountPerInstance > 0)
+                if (member.PhysicsPartRange.First != 4294967295)
                 {
                     // PhysicsPartRange
                     //for (int i = 0; i < ((member.PhysicsPartRange.Last - member.PhysicsPartRange.First + 1) / member.PhysicsPartCountPerInstance); i++)
                     for (int i = 0; i < member.InstanceCount; i++)
                     {
+                        //if (index >= physics.Count)
+                        //{
+                        //    index = index;
+                        //    App.Logger.Log(i.ToString());
+                        //    App.Logger.Log(member.InstanceCount.ToString());
+                        //    App.Logger.Log(entry.Name);
+                        //    App.Logger.Log(memberindex.ToString());
+                        //}
                         instance.transforms.Add(/*context.currentOffset.Peek() + */physics[index++]);
                     }
                 }
-                else
+                //else
                 {
                     List<LinearTransform> transforms = member.InstanceTransforms;
                     foreach (var trans in transforms)
@@ -72,6 +83,7 @@ namespace UnityLevelPlugin.Export
                 }
 
                 group.members.Add(instance);
+                memberindex++;
             }
             //context.currentOffset.Pop();
         }
