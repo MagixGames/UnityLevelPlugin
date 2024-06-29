@@ -46,7 +46,7 @@ namespace UnityLevelPlugin.Export
             int memberindex = 0;
             foreach (StaticModelGroupMemberData member in modelGroup.MemberDatas)
             {
-                ULObjectInstance instance = new ULObjectInstance();
+                ULStaticModelGroupObjectInstance instance = new ULStaticModelGroupObjectInstance();
                 EbxAssetEntry memberType = App.AssetManager.GetEbxEntry(member.MemberType.External.FileGuid);
                 EbxAssetEntry mesh = App.AssetManager.GetEbxEntry(member.MeshAsset.External.FileGuid);
                 context.plugin.AddMesh(mesh);
@@ -54,7 +54,15 @@ namespace UnityLevelPlugin.Export
 
                 member.InstanceObjectVariation.ForEach((value) => instance.objectVariations.Add((value == 0) ? "Default" : (context.plugin.ObjectVariablesTable.TryGetValue(value, out var outEntry)) ? outEntry : "Default"));
 
-                instance.objectBlueprint = new ULObjectBlueprint(mesh.Filename + ".fbx", mesh.Name);
+                instance.objectData = new ULStaticModelGroupMemberData()
+                {
+                    meshPath = mesh.Filename + ".fbx",
+                    meshFullPath = mesh.Name,
+                    org_HealthStateEntityManagerId = member.HealthStateEntityManagerId,
+                    org_PartComponentCount = member.PartComponentCount,
+                    org_PhysicsPartCountPerInstance = member.PhysicsPartCountPerInstance,
+                };
+
                 //if (member.PhysicsPartCountPerInstance > 0)
                 if (member.PhysicsPartRange.First != 4294967295)
                 {
@@ -62,15 +70,7 @@ namespace UnityLevelPlugin.Export
                     //for (int i = 0; i < ((member.PhysicsPartRange.Last - member.PhysicsPartRange.First + 1) / member.PhysicsPartCountPerInstance); i++)
                     for (int i = 0; i < member.InstanceCount; i++)
                     {
-                        //if (index >= physics.Count)
-                        //{
-                        //    index = index;
-                        //    App.Logger.Log(i.ToString());
-                        //    App.Logger.Log(member.InstanceCount.ToString());
-                        //    App.Logger.Log(entry.Name);
-                        //    App.Logger.Log(memberindex.ToString());
-                        //}
-                        instance.transforms.Add(/*context.currentOffset.Peek() + */physics[index++]);
+                        instance.transforms.Add(physics[index++]);
                     }
                 }
                 //else
@@ -78,7 +78,7 @@ namespace UnityLevelPlugin.Export
                     List<LinearTransform> transforms = member.InstanceTransforms;
                     foreach (var trans in transforms)
                     {
-                        instance.transforms.Add(/*context.currentOffset.Peek() + */ ULTransform.FromLinearTransform(trans));
+                        instance.transforms.Add(ULTransform.FromLinearTransform(trans));
                     }
                 }
 

@@ -16,24 +16,24 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Developer - Debug|x64' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\Developer\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;FROSTY</DefineConstants>
   </PropertyGroup>
   
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release - Alpha|x64' ">
     <OutputPath>bin\Release\Alpha\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;FROSTY</DefineConstants>
     <Optimize>true</Optimize>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release - Beta|x64'">
     <OutputPath>bin\Release\Beta\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;FROSTY</DefineConstants>
     <Optimize>true</Optimize>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release - Final|x64'">
     <OutputPath>bin\Release\Final\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;FROSTY</DefineConstants>
     <Optimize>true</Optimize>
   </PropertyGroup>
   
@@ -54,6 +54,12 @@
     <Reference Include="EbxClasses">
       <HintPath>..\..\FrostySdk\Profiles\StarWarsIISDK.dll</HintPath>
     </Reference>
+    <Reference Include="SharpDX.Direct3D11">
+      <HintPath>..\..\FrostyEditor\ThirdParty\SharpDX.Direct3D11.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.DXGI">
+      <HintPath>..\..\FrostyEditor\ThirdParty\SharpDX.DXGI.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
@@ -71,6 +77,7 @@
     <ProjectReference Include="..\..\FrostySdk\FrostySdk.csproj">
       <Private>false</Private>
     </ProjectReference>
+    <ProjectReference Include="..\DuplicationPlugin\DuplicationPlugin.csproj" />
     <ProjectReference Include="..\MeshSetPlugin\MeshSetPlugin.csproj" />
     <ProjectReference Include="..\ObjToHavok\ObjToHavok.csproj" />
     <ProjectReference Include="..\TexturePlugin\TexturePlugin.csproj" />

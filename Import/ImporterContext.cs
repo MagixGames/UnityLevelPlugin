@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UnityLevelPlugin.Export;
+namespace UnityLevelPlugin.Import;
 
-public class ExporterContext
+public class ImporterContext
 {
     public UnityLevelPlugin plugin;
 
-    public ExporterContext(UnityLevelPlugin pUlPlugin) 
+    public ImporterContext(UnityLevelPlugin pUlPlugin)
     {
         plugin = pUlPlugin;
     }
