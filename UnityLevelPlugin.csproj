@@ -51,14 +51,14 @@
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="EbxClasses">
-      <HintPath>..\..\FrostySdk\Profiles\StarWarsIISDK.dll</HintPath>
-    </Reference>
     <Reference Include="SharpDX.Direct3D11">
       <HintPath>..\..\FrostyEditor\ThirdParty\SharpDX.Direct3D11.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.DXGI">
       <HintPath>..\..\FrostyEditor\ThirdParty\SharpDX.DXGI.dll</HintPath>
+    </Reference>
+    <Reference Include="EbxClasses">
+      <HintPath>..\..\FrostySdk\Profiles\StarWarsIISDK.dll</HintPath>
     </Reference>
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />

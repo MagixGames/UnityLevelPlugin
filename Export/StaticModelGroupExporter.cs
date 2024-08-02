@@ -29,10 +29,10 @@ namespace UnityLevelPlugin.Export
                 return;
             }
             group = new ULEStaticModelGroup();
-            ResAssetEntry resEntry = App.AssetManager.GetResEntry(entry.Name + "/staticmodelgroup_physics_win32");
+            ResAssetEntry resEntry = App.AssetManager.GetResEntry(entry.Name + "/staticmodelgroup_physics_win32"); // gen4b
             if (resEntry == null)
             {
-                App.Logger.Log("Static model group not found: " + entry.Name + "/staticmodelgroup_physics_win32");
+                App.Logger.Log("Static model group not found: " + entry.Name + "/staticmodelgroup_physics_win32"); // gen4b
                 //return;
             }
             List<ULTransform> physics = ((resEntry == null) ? new List<ULTransform>() : ULTools.GetPhysicsDataOfObjectBlueprint(context.plugin.outputFolder, resEntry.Name));

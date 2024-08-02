@@ -13,21 +13,14 @@ using UnityLevelPlugin.Tools;
 
 namespace UnityLevelPlugin.Import;
 
-internal class StaticModelGroupImporter : Importer
+public partial class Importer
 {
-    public StaticModelGroupImporter(UnityLevelPlugin plugin) : base(plugin)
+    // @TODO
+    public void ImportStaticModelGroups()
     {
-    }
-
-    public StaticModelGroupImporter(ImporterContext context) : base(context)
-    {
-    }
-
-    public override void Import(EbxAssetEntry entry, dynamic data)
-    {
-        ULStaticModelGroupObjectInstance inst = (ULStaticModelGroupObjectInstance)data;
-
-        EbxAsset asset = App.AssetManager.GetEbx(entry);
+        // UNFINISHED
+        return;
+        EbxAsset asset = App.AssetManager.GetEbx(levelDataAssetEntry);
 
         StaticModelGroupEntityData group = (StaticModelGroupEntityData)asset.Objects.FirstOrDefault((o) => o is StaticModelGroupEntityData);
 

@@ -25,5 +25,6 @@ using UnityLevelPlugin;
 [assembly: PluginDisplayName("UnityLevelPlugin")]
 [assembly: PluginAuthor("Magix")]
 [assembly: PluginVersion("1.0.0.0")]
+[assembly: RegisterOptionsExtension(typeof(ULOptions))]
 [assembly: RegisterDataExplorerContextMenu(typeof(ExportUnityLevelButton))]
 [assembly: RegisterDataExplorerContextMenu(typeof(ImportUnityLevelButton))]
