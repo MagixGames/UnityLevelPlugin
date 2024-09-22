@@ -105,16 +105,16 @@ public partial class Importer
             // CREDIT FOR THE RETARDED IDEA: @FEGEEWATERS
 
             // we export and reimport the same fucking mesh (retarded (yes i needed to say it twice))
-            meshEntry = App.AssetManager.GetEbxEntry(meshEntry.Name);
-            MeshSetPlugin.Resources.MeshSet meshSet2 = App.AssetManager.GetResAs<MeshSetPlugin.Resources.MeshSet>(
-                    App.AssetManager.GetResEntry(
-                        (ulong)(((dynamic)App.AssetManager.GetEbx(meshEntry).RootObject).MeshSetResource)));
+            //meshEntry = App.AssetManager.GetEbxEntry(meshEntry.Name);
+            //MeshSetPlugin.Resources.MeshSet meshSet2 = App.AssetManager.GetResAs<MeshSetPlugin.Resources.MeshSet>(
+            //        App.AssetManager.GetResEntry(
+            //            (ulong)(((dynamic)App.AssetManager.GetEbx(meshEntry).RootObject).MeshSetResource)));
             
-            fbxExporter.ExportFBX(App.AssetManager.GetEbx(meshEntry).RootObject, ToFile("Meshes/" + meshData.meshFileName + ".temp.fbx"), "2017", "Meters", true, false, "", "binary", meshSet2);
+            //fbxExporter.ExportFBX(App.AssetManager.GetEbx(meshEntry).RootObject, ToFile("Meshes/" + meshData.meshFileName + ".temp.fbx"), "2017", "Meters", true, false, "", "binary", meshSet2);
 
-            fbxImporter.ImportFBX(ToFile($"Meshes/{meshData.meshFileName}.temp.fbx"), meshSet2,
-                App.AssetManager.GetEbx(meshEntry), meshEntry, new FrostyMeshImportSettings());
-            File.Delete(ToFile("Meshes/" + meshData.meshFileName + ".temp.fbx"));
+            //fbxImporter.ImportFBX(ToFile($"Meshes/{meshData.meshFileName}.temp.fbx"), meshSet2,
+            //    App.AssetManager.GetEbx(meshEntry), meshEntry, new FrostyMeshImportSettings());
+            //File.Delete(ToFile("Meshes/" + meshData.meshFileName + ".temp.fbx"));
 
             // RETARDED IDEA ALERT
             // RETARDED IDEA ALERT 
